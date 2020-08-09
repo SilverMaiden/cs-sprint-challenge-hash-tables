@@ -24,6 +24,7 @@ class HashTable:
         # Your code here
         self.capacity = capacity
         self.table = [None] * capacity
+        self.in_use = 0
 
 
     def get_num_slots(self):
@@ -46,11 +47,7 @@ class HashTable:
 
         Implement this.
         """
-        used_count = 0
-        for each in self.table:
-            if each is not None:
-                used_count += 1
-        return used_count / self.capacity
+        return self.in_use / self.capacity
         # Your code here
 
 
@@ -96,10 +93,11 @@ class HashTable:
         # Your code here -- should handle collisions
 
         newEntry = HashTableEntry(key, value)
-        hash_key = self.hash_index(key)
-       
-        if self.get_load_factor() < 0.7 and hash_key < len(self.table):
+        hash_key = self.hash_index(key)       
+        if self.get_load_factor() < 0.7:
+            
             if self.table[hash_key] is None:
+                self.in_use += 1
                 self.table[hash_key] = newEntry
             else:
                 current_node = self.table[hash_key]
@@ -180,6 +178,32 @@ class HashTable:
                 return current_node.value
             elif current_node.next is None:
                 return None
+
+        else:
+            return None
+    
+
+    def getAllValues(self, key):
+        """
+        Retrieve ALL the values stored with the given hash_key key.
+
+        Returns None if the key is not found.
+
+        Implement this.
+        """
+        # Your code here
+        results = []
+        hash_key = self.hash_index(key)
+        if self.table[hash_key] is not None:
+            current_node = self.table[hash_key]
+            while current_node.next is not None:
+                if current_node.key == key:
+                    results.append(current_node.value)
+                current_node = current_node.next
+
+            if current_node.key == key:
+                results.append(current_node.value)
+            return results
 
         else:
             return None

@@ -38,18 +38,22 @@ def has_negatives(a):
     smaller = min([pos_list, neg_list], key=len)
     bigger = max([pos_list, neg_list], key=len)
 
+    # Step 5: Make sure smaller and bigger are not the same list.
     if len(smaller) == len(bigger):
         smaller = neg_list
         bigger = pos_list
+    
+    # Step 6: Create a hashtable with the capacity of the length of list smaller.
+    hash_table = HashTable(len(smaller))
 
-    hashTable = HashTable(len(smaller))
+    # Step 7: Add each value in smaller as hash table entry, key is str version of value
 
     for num in smaller:
-        hashTable.put(str(abs(num)), True)
+        hash_table.put(str(abs(num)), True)
 
-    
+    # Step 8: Go through list bigger, and if able to find in hashtable, add val to results.
     for num in bigger:
-        hash_entry = hashTable.get(str(abs(num)))
+        hash_entry = hash_table.get(str(abs(num)))
         if hash_entry is not None:
             results.append(abs(num))
 
